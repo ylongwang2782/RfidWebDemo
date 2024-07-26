@@ -180,12 +180,25 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${tag.epc}</td>
-                    <td>${tag.tid}</td>
                     <td>${tag.rssi}</td>
                     <td>${tag.count}</td>
                 `;
                 dataBody.appendChild(row);
             });
+        }
+
+        function updateStartScanButton() {
+            const startScanButton = document.getElementById('start-scan-button');
+            if (startScanButton.textContent === '开始识别') {
+                startScanButton.textContent = '停止识别';
+            }
+            else {
+                startScanButton.textContent = '开始识别';
+            }
+        }
+
+        function handleButtonClick() {
+            updateStartScanButton();
         }
     </script>
 
