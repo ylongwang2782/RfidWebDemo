@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tag Scan Fragment</title>
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+        }
+
+        .card {
+            margin: 8px;
+            padding: 8px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-content {
+            padding: 8px;
+        }
+
+        .text-bold {
+            font-weight: bold;
+        }
+
+        .text-red {
+            color: #ff4444;
+        }
+
+        .divider {
+            border-bottom: 1px solid #ccc;
+            margin: 8px 0;
+        }
+
+        .linear-layout {
+            display: flex;
+            align-items: center;
+            margin: 10px 8px;
+        }
+
+        .linear-layout.horizontal {
+            flex-direction: row;
+        }
+
+        .linear-layout .text-center {
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .button {
+            display: block;
+            width: calc(100% - 16px);
+            margin: 8px auto;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            text-align: center;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .recycler-view {
+            margin: 8px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <div class="card-content">
+            <div class="linear-layout">
+                <span>扫描信息</span>
+            </div>
+            <div class="linear-layout horizontal">
+                <span class="text-bold">标签数量</span>
+                <span class="text-red text-bold" style="flex-grow: 1; text-align: right;">0</span>
+            </div>
+            <div class="divider"></div>
+            <div class="linear-layout horizontal">
+                <span class="text-bold">累计返回标签数量</span>
+                <span class="text-red text-bold" style="flex-grow: 1; text-align: right;">0</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="linear-layout horizontal">
+        <span>region</span>
+        <select>
+            <option value="@array/spinner_inventory_mode">epc</option>
+            <option value="@array/spinner_inventory_mode_tid">epc + tid</option>
+            <option value="@array/spinner_inventory_mode_user">epc + user</option>
+        </select>
+        <span class="text-center" style="flex-grow: 1;"></span>
+    </div>
+
+    <button class="button" id="start-scan-button">开始识别</button>
+
+    <div class="card">
+        <div class="card-content">
+            <div class="linear-layout horizontal">
+                <span class="text-bold" style="flex: 3.5; text-align: center;">DATA</span>
+                <span class="text-bold" style="flex: 1; text-align: center;">COUNT</span>
+                <span class="text-bold" style="flex: 1; text-align: center;">RSSI</span>
+            </div>
+            <div class="divider"></div>
+            <div class="recycler-view" id="recycler-view">
+                <!-- RecyclerView content goes here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // // 获取按钮和 RecyclerView 元素
+        // const startScanButton = document.getElementById('start-scan-button');
+        // const recyclerView = document.getElementById('recycler-view');
+
+        // // 为按钮添加点击事件监听器
+        // startScanButton.addEventListener('click', function () {
+
+        //     // 点击后切换按钮文字
+        //     if (startScanButton.textContent === '开始识别') {
+        //         startScanButton.textContent = '停止识别';
+        //     }
+        //     else {
+        //         startScanButton.textContent = '开始识别';
+        //     }
+
+        //     // 创建新的行
+        //     const newRow = document.createElement('div');
+        //     newRow.classList.add('linear-layout', 'horizontal');
+
+        //     // 添加 DATA、COUNT 和 RSSI 内容
+        //     const dataSpan = document.createElement('span');
+        //     dataSpan.classList.add('text-bold');
+        //     dataSpan.style.flex = '3.5';
+        //     dataSpan.style.textAlign = 'center';
+        //     dataSpan.textContent = 'New Data';
+
+        //     const countSpan = document.createElement('span');
+        //     countSpan.classList.add('text-bold');
+        //     countSpan.style.flex = '1';
+        //     countSpan.style.textAlign = 'center';
+        //     countSpan.textContent = '1';
+
+        //     const rssiSpan = document.createElement('span');
+        //     rssiSpan.classList.add('text-bold');
+        //     rssiSpan.style.flex = '1';
+        //     rssiSpan.style.textAlign = 'center';
+        //     rssiSpan.textContent = '-60';
+
+        //     // 将内容添加到新行
+        //     newRow.appendChild(dataSpan);
+        //     newRow.appendChild(countSpan);
+        //     newRow.appendChild(rssiSpan);
+
+        //     // 将新行添加到 RecyclerView
+        //     recyclerView.appendChild(newRow);
+        // });
+
+        function loadData() {
+            const data = JSON.parse(AndroidEpc.getData()); // 调用 Android 接口获取数据
+            updateTable(data);
+        }
+
+        function updateTable(data) {
+            const dataBody = document.getElementById('recycler-view');
+            dataBody.innerHTML = ''; // 清空表格内容
+
+            data.forEach(tag => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${tag.epc}</td>
+                    <td>${tag.tid}</td>
+                    <td>${tag.rssi}</td>
+                    <td>${tag.count}</td>
+                `;
+                dataBody.appendChild(row);
+            });
+        }
+    </script>
+
+
+</body>
+
+</html>
