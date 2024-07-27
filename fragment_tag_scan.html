@@ -83,12 +83,12 @@
             </div>
             <div class="linear-layout horizontal">
                 <span class="text-bold">标签数量</span>
-                <span class="text-red text-bold" style="flex-grow: 1; text-align: right;">0</span>
+                <span class="text-red text-bold" id="tag-num" style="flex-grow: 1; text-align: right;">0</span>
             </div>
             <div class="divider"></div>
             <div class="linear-layout horizontal">
                 <span class="text-bold">累计返回标签数量</span>
-                <span class="text-red text-bold" style="flex-grow: 1; text-align: right;">0</span>
+                <span class="text-red text-bold" id="tag-total-count" style="flex-grow: 1; text-align: right;">0</span>
             </div>
         </div>
     </div>
@@ -109,8 +109,8 @@
         <div class="card-content">
             <div class="linear-layout horizontal">
                 <span class="text-bold" style="flex: 3.5; text-align: center;">DATA</span>
-                <span class="text-bold" style="flex: 1; text-align: center;">COUNT</span>
                 <span class="text-bold" style="flex: 1; text-align: center;">RSSI</span>
+                <span class="text-bold" style="flex: 1; text-align: center;">COUNT</span>
             </div>
             <div class="divider"></div>
             <div class="recycler-view" id="recycler-view">
@@ -167,14 +167,37 @@
         //     recyclerView.appendChild(newRow);
         // });
 
+        // 主动类型
+        // AndroidEpc.getData(); // 调用 Android 接口获取数据
+
+        // 触发类型
+        // buttonClickHandler();
+
         function loadData() {
             const data = JSON.parse(AndroidEpc.getData()); // 调用 Android 接口获取数据
             updateTable(data);
         }
 
+        function epcDataGet(data) {
+            updateTable(data);
+        }
+
+        function buttonClickHandler() {
+            updateStartScanButton();
+        }
+
+        function updateTagCounts(labelCount, totalLabelCount) {
+            // 选择并更新标签数量
+            document.getElementById('tag-num').textContent = labelCount;
+            // 选择并更新累计返回标签数量
+            document.getElementById('tag-total-count').textContent = totalLabelCount;
+        }
+
         function updateTable(data) {
             const dataBody = document.getElementById('recycler-view');
             dataBody.innerHTML = ''; // 清空表格内容
+
+
 
             data.forEach(tag => {
                 const row = document.createElement('tr');
@@ -185,6 +208,15 @@
                 `;
                 dataBody.appendChild(row);
             });
+
+            tagNum = data.length;
+            tagTotalCount = 0;
+            data.forEach(tag => {
+                tagTotalCount += tag.count;
+            });
+
+            updateTagCounts(tagNum, tagTotalCount);
+
         }
 
         function updateStartScanButton() {
@@ -197,9 +229,7 @@
             }
         }
 
-        function handleButtonClick() {
-            updateStartScanButton();
-        }
+
     </script>
 
 
