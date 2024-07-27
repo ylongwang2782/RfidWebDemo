@@ -11,6 +11,19 @@
             font-family: Arial, sans-serif;
         }
 
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            word-break: break-all;
+            /* Add this line to enable word break */
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
         .card {
             margin: 8px;
             padding: 8px;
@@ -87,7 +100,7 @@
             </div>
             <div class="divider"></div>
             <div class="linear-layout horizontal">
-                <span class="text-bold">累计返回标签数量</span>
+                <span class="text-bold">累计返回标签次数</span>
                 <span class="text-red text-bold" id="tag-total-count" style="flex-grow: 1; text-align: right;">0</span>
             </div>
         </div>
@@ -96,9 +109,9 @@
     <div class="linear-layout horizontal">
         <span>region</span>
         <select>
-            <option value="@array/spinner_inventory_mode">epc</option>
-            <option value="@array/spinner_inventory_mode_tid">epc + tid</option>
-            <option value="@array/spinner_inventory_mode_user">epc + user</option>
+            <option id="epc-option" value="@array/spinner_inventory_mode">epc</option>
+            <option id="epc+tid-option" value="@array/spinner_inventory_mode_tid">epc + tid</option>
+            <option id="epc+user-option" value="@array/spinner_inventory_mode_user">epc + user</option>
         </select>
         <span class="text-center" style="flex-grow: 1;"></span>
     </div>
@@ -194,11 +207,11 @@
         }
 
         function updateTable(data) {
+            const selectElement = document.querySelector('select');
+            // 获取当前选中的<option>元素
+
             const dataBody = document.getElementById('recycler-view');
             dataBody.innerHTML = ''; // 清空表格内容
-
-
-
             data.forEach(tag => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
@@ -214,7 +227,6 @@
             data.forEach(tag => {
                 tagTotalCount += tag.count;
             });
-
             updateTagCounts(tagNum, tagTotalCount);
 
         }
