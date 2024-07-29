@@ -121,7 +121,8 @@
     <div class="card">
         <div class="card-content">
             <div class="linear-layout horizontal">
-                <span class="text-bold" style="flex: 3.5; text-align: center;">DATA</span>
+                <span class="text-bold" style="flex: 2.5; text-align: center;">EPC</span>
+                <span class="text-bold" style="flex: 1; text-align: center;">TID</span>
                 <span class="text-bold" style="flex: 1; text-align: center;">RSSI</span>
                 <span class="text-bold" style="flex: 1; text-align: center;">COUNT</span>
             </div>
@@ -196,6 +197,7 @@
         }
 
         function buttonClickHandler() {
+            AndroidEpc.startScan();
             updateStartScanButton();
         }
 
@@ -209,25 +211,48 @@
         function updateTable(data) {
             const selectElement = document.querySelector('select');
             // 获取当前选中的<option>元素
-
-            const dataBody = document.getElementById('recycler-view');
-            dataBody.innerHTML = ''; // 清空表格内容
-            data.forEach(tag => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
+            if (selectElement.selectedIndex == 0) {
+                AndroidEpc.h5SetQueryMode(0);
+                const dataBody = document.getElementById('recycler-view');
+                dataBody.innerHTML = ''; // 清空表格内容
+                data.forEach(tag => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
                     <td>${tag.epc}</td>
                     <td>${tag.rssi}</td>
                     <td>${tag.count}</td>
-                `;
-                dataBody.appendChild(row);
-            });
+                    `;
+                    dataBody.appendChild(row);
+                });
 
-            tagNum = data.length;
-            tagTotalCount = 0;
-            data.forEach(tag => {
-                tagTotalCount += tag.count;
-            });
-            updateTagCounts(tagNum, tagTotalCount);
+                tagNum = data.length;
+                tagTotalCount = 0;
+                data.forEach(tag => {
+                    tagTotalCount += tag.count;
+                });
+                updateTagCounts(tagNum, tagTotalCount);
+            } else if (selectElement.selectedIndex == 1) {
+                AndroidEpc.h5SetQueryMode(1);
+                const dataBody = document.getElementById('recycler-view');
+                dataBody.innerHTML = ''; // 清空表格内容
+                data.forEach(tag => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${tag.epc}</td>
+                        <td>${tag.tid}</td>
+                        <td>${tag.rssi}</td>
+                        <td>${tag.count}</td>
+                    `;
+                    dataBody.appendChild(row);
+                });
+
+                tagNum = data.length;
+                tagTotalCount = 0;
+                data.forEach(tag => {
+                    tagTotalCount += tag.count;
+                });
+                updateTagCounts(tagNum, tagTotalCount);
+            }
 
         }
 
