@@ -201,6 +201,16 @@
             updateStartScanButton();
         }
 
+        function onKeyDownHandler() {
+            const startScanButton = document.getElementById('start-scan-button');
+            startScanButton.textContent = '停止识别';
+        }
+
+        function onKeyUpHandler() {
+            const startScanButton = document.getElementById('start-scan-button');
+            startScanButton.textContent = '开始识别';
+        }
+
         function updateTagCounts(labelCount, totalLabelCount) {
             // 选择并更新标签数量
             document.getElementById('tag-num').textContent = labelCount;
@@ -255,6 +265,10 @@
             }
 
         }
+
+
+
+
 
         function updateStartScanButton() {
             const startScanButton = document.getElementById('start-scan-button');
