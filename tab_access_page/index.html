@@ -153,6 +153,40 @@
     </div>
 
     <script>
+
+        // initial memory_bank element
+        var memoryBankSelect = document.getElementById('sp_access_memory_bank');
+        var options = [
+            { value: '00', text: 'RFU' },
+            { value: '01', text: 'EPC' },
+            { value: '02', text: 'TID' },
+            { value: '03', text: 'USER' }
+        ];
+        options.forEach(function (option) {
+            var newOption = document.createElement('option');
+            newOption.value = option.value;
+            newOption.text = option.text;
+            memoryBankSelect.add(newOption);
+        });
+
+        // 获取word start下拉框元素，循环生成选项并添加到下拉框中
+        var wordStartSelect = document.getElementById('sp_access_word_start');
+        for (var i = 0; i <= 255; i++) {
+            var option = document.createElement('option');
+            option.value = i;
+            option.text = i;
+            wordStartSelect.add(option);
+
+        }
+        // 获取word count下拉框元素，循环生成选项并添加到下拉框中
+        var wordStartSelect = document.getElementById('sp_access_word_count');
+        for (var i = 0; i <= 255; i++) {
+            var option = document.createElement('option');
+            option.value = i;
+            option.text = i;
+            wordStartSelect.add(option);
+        }
+
         // Add event listeners for navigation
         document.getElementById('tab_inventory_page').addEventListener('click', function () {
             window.location.href = 'http://192.168.8.100:8082/';
