@@ -187,14 +187,14 @@
         // 触发类型
         // buttonClickHandler();
 
-        function loadData() {
-            const data = JSON.parse(AndroidEpc.getData()); // 调用 Android 接口获取数据
-            updateTable(data);
-        }
+        // function loadData() {
+        //     const data = JSON.parse(AndroidEpc.getData()); // 调用 Android 接口获取数据
+        //     updateTable(data);
+        // }
 
-        function epcDataGet(data) {
-            updateTable(data);
-        }
+        // function epcDataGet(data) {
+        //     updateTable(data);
+        // }
 
         function buttonClickHandler() {
             AndroidEpc.startScan();
@@ -211,6 +211,11 @@
             startScanButton.textContent = '开始识别';
         }
 
+        function singleTagScanDoneHandler() {
+            const data = JSON.parse(AndroidEpc.getData()); // 调用 Android 接口获取数据
+            updateTable(data);
+        }
+
         function updateTagCounts(labelCount, totalLabelCount) {
             // 选择并更新标签数量
             document.getElementById('tag-num').textContent = labelCount;
@@ -222,52 +227,26 @@
             const selectElement = document.querySelector('select');
             // 获取当前选中的<option>元素
             if (selectElement.selectedIndex == 0) {
-                AndroidEpc.h5SetQueryMode(0);
                 const dataBody = document.getElementById('recycler-view');
                 dataBody.innerHTML = ''; // 清空表格内容
                 data.forEach(tag => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                    <td>${tag.epc}</td>
-                    <td>${tag.rssi}</td>
-                    <td>${tag.count}</td>
+                    <td>${tag.epcStr}</td>
+                    <td>${tag.tagData}</td>
+                    <td>${tag.findCnt}</td>
                     `;
                     dataBody.appendChild(row);
                 });
 
-                tagNum = data.length;
-                tagTotalCount = 0;
+                tagCount = data.length;
+                tagTotalFindCount = 0;
                 data.forEach(tag => {
-                    tagTotalCount += tag.count;
+                    tagTotalFindCount += tag.findCnt;
                 });
-                updateTagCounts(tagNum, tagTotalCount);
-            } else if (selectElement.selectedIndex == 1) {
-                AndroidEpc.h5SetQueryMode(1);
-                const dataBody = document.getElementById('recycler-view');
-                dataBody.innerHTML = ''; // 清空表格内容
-                data.forEach(tag => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${tag.epc}</td>
-                        <td>${tag.tid}</td>
-                        <td>${tag.rssi}</td>
-                        <td>${tag.count}</td>
-                    `;
-                    dataBody.appendChild(row);
-                });
-
-                tagNum = data.length;
-                tagTotalCount = 0;
-                data.forEach(tag => {
-                    tagTotalCount += tag.count;
-                });
-                updateTagCounts(tagNum, tagTotalCount);
+                updateTagCounts(tagCount, tagTotalFindCount);
             }
-
         }
-
-
-
 
 
         function updateStartScanButton() {
