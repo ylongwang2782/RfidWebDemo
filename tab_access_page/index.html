@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tag Access</title>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            margin: 5px;
+        }
+
+        .horizontal-container {
+            display: flex;
+            flex-direction: row;
+            margin: 5px 0;
+        }
+
+        .checkbox-container,
+        .input-container,
+        .button-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .checkbox-container input,
+        .input-container input,
+        .input-container select,
+        .button-container button {
+            margin: 0 5px;
+        }
+
+        .input-container label {
+            width: 100px;
+        }
+
+        .input-container input,
+        .input-container select {
+            flex-grow: 1;
+            height: 35px;
+        }
+
+        .button-container button {
+            width: 100%;
+            height: 40px;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Checkboxes -->
+        <div class="checkbox-container">
+            <input type="checkbox" id="chk_access_ant1" checked>
+            <label for="chk_access_ant1">Ant-1</label>
+
+            <input type="checkbox" id="chk_access_ant2">
+            <label for="chk_access_ant2">Ant-2</label>
+
+            <input type="checkbox" id="chk_access_ant3">
+            <label for="chk_access_ant3">Ant-3</label>
+
+            <input type="checkbox" id="chk_access_ant4">
+            <label for="chk_access_ant4">Ant-4</label>
+        </div>
+
+        <!-- Spinner for EPCs -->
+        <div class="input-container">
+            <label for="sp_access_epc_list">EPCs:</label>
+            <select id="sp_access_epc_list"></select>
+        </div>
+
+        <!-- Inventory Button -->
+        <div class="button-container">
+            <button id="btn_access_inventory">开始识别</button>
+        </div>
+
+        <!-- Memory Bank -->
+        <div class="input-container">
+            <label for="sp_access_memory_bank">Memory Bank:</label>
+            <select id="sp_access_memory_bank"></select>
+        </div>
+
+        <!-- Word Start -->
+        <div class="input-container">
+            <label for="sp_access_word_start">Word Start:</label>
+            <select id="sp_access_word_start"></select>
+        </div>
+
+        <!-- Word Count -->
+        <div class="input-container">
+            <label for="sp_access_word_count">Word Count:</label>
+            <select id="sp_access_word_count"></select>
+        </div>
+
+        <!-- Access PWB -->
+        <div class="input-container">
+            <label for="ed_access_access_pwb">Access PWB:</label>
+            <input type="text" id="ed_access_access_pwb" value="00000000" pattern="[0-9a-fA-F]*">
+        </div>
+
+        <!-- Data (Hex) -->
+        <div class="input-container">
+            <label for="ed_access_data">Data(Hex):</label>
+            <input type="text" id="ed_access_data" value="0000" pattern="[0-9a-fA-F]*">
+        </div>
+
+        <!-- Write Button -->
+        <div class="button-container">
+            <button id="btn_access_write">写入</button>
+        </div>
+
+        <!-- Read Button -->
+        <div class="button-container">
+            <button id="btn_access_read">读取</button>
+        </div>
+    </div>
+</body>
+
+</html>

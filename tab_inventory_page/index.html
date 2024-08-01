@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tag Scan Fragment</title>
+    <title>tab inventory</title>
     <style>
         body {
             background-color: #f2f2f2;
@@ -84,10 +84,37 @@
             margin: 8px;
             overflow-y: auto;
         }
+
+        /* New styles for the navigation bar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            background-color: #333;
+            padding: 10px;
+            color: #fff;
+        }
+
+        .navbar a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
     </style>
 </head>
 
 <body>
+
+    <!-- Navigation bar -->
+    <div class="navbar">
+        <a href="#" id="home-link">Home</a>
+        <a href="#" id="other-link">Other Page</a>
+    </div>
 
     <div class="card">
         <div class="card-content">
@@ -134,68 +161,6 @@
     </div>
 
     <script>
-        // // 获取按钮和 RecyclerView 元素
-        // const startScanButton = document.getElementById('start-scan-button');
-        // const recyclerView = document.getElementById('recycler-view');
-
-        // // 为按钮添加点击事件监听器
-        // startScanButton.addEventListener('click', function () {
-
-        //     // 点击后切换按钮文字
-        //     if (startScanButton.textContent === '开始识别') {
-        //         startScanButton.textContent = '停止识别';
-        //     }
-        //     else {
-        //         startScanButton.textContent = '开始识别';
-        //     }
-
-        //     // 创建新的行
-        //     const newRow = document.createElement('div');
-        //     newRow.classList.add('linear-layout', 'horizontal');
-
-        //     // 添加 DATA、COUNT 和 RSSI 内容
-        //     const dataSpan = document.createElement('span');
-        //     dataSpan.classList.add('text-bold');
-        //     dataSpan.style.flex = '3.5';
-        //     dataSpan.style.textAlign = 'center';
-        //     dataSpan.textContent = 'New Data';
-
-        //     const countSpan = document.createElement('span');
-        //     countSpan.classList.add('text-bold');
-        //     countSpan.style.flex = '1';
-        //     countSpan.style.textAlign = 'center';
-        //     countSpan.textContent = '1';
-
-        //     const rssiSpan = document.createElement('span');
-        //     rssiSpan.classList.add('text-bold');
-        //     rssiSpan.style.flex = '1';
-        //     rssiSpan.style.textAlign = 'center';
-        //     rssiSpan.textContent = '-60';
-
-        //     // 将内容添加到新行
-        //     newRow.appendChild(dataSpan);
-        //     newRow.appendChild(countSpan);
-        //     newRow.appendChild(rssiSpan);
-
-        //     // 将新行添加到 RecyclerView
-        //     recyclerView.appendChild(newRow);
-        // });
-
-        // 主动类型
-        // AndroidEpc.getData(); // 调用 Android 接口获取数据
-
-        // 触发类型
-        // buttonClickHandler();
-
-        // function loadData() {
-        //     const data = JSON.parse(AndroidEpc.getData()); // 调用 Android 接口获取数据
-        //     updateTable(data);
-        // }
-
-        // function epcDataGet(data) {
-        //     updateTable(data);
-        // }
-
         function buttonClickHandler() {
             AndroidEpc.startScan();
             updateStartScanButton();
@@ -248,7 +213,6 @@
             }
         }
 
-
         function updateStartScanButton() {
             const startScanButton = document.getElementById('start-scan-button');
             if (startScanButton.textContent === '开始识别') {
@@ -259,10 +223,15 @@
             }
         }
 
+        // Add event listeners for navigation
+        document.getElementById('home-link').addEventListener('click', function () {
+            window.location.href = '/';
+        });
 
+        document.getElementById('other-link').addEventListener('click', function () {
+            window.location.href = 'http://localhost:8083/';
+        });
     </script>
-
-
 </body>
 
 </html>
