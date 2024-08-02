@@ -17,7 +17,6 @@
             text-align: left;
             border-bottom: 1px solid #ddd;
             word-break: break-all;
-            /* Add this line to enable word break */
         }
 
         th {
@@ -136,14 +135,12 @@
         </div>
     </div>
 
-    <button class="button" id="start-scan-button">开始识别</button>
+    <button class="button" id="start-scan-button" type="button">开始识别</button>
 
     <div class="card">
         <div class="card-content">
             <div class="linear-layout horizontal">
-                <span class="text-bold" style="flex: 2.5; text-align: center;">EPC</span>
-                <span class="text-bold" style="flex: 1; text-align: center;">TID</span>
-                <span class="text-bold" style="flex: 1; text-align: center;">RSSI</span>
+                <span class="text-bold" style="flex: 4.5; text-align: center;">EPC</span>
                 <span class="text-bold" style="flex: 1; text-align: center;">COUNT</span>
             </div>
             <div class="divider"></div>
@@ -154,22 +151,16 @@
     </div>
 
     <script>
-        function buttonClickHandler() {
-            AndroidEpc.startScan();
-            updateStartScanButton();
-        }
-
         function onKeyDownHandler() {
-            const startScanButton = document.getElementById('start-scan-button');
             startScanButton.textContent = '停止识别';
         }
 
         function onKeyUpHandler() {
-            const startScanButton = document.getElementById('start-scan-button');
             startScanButton.textContent = '开始识别';
         }
 
         function singleTagScanDoneHandler() {
+            // updateTagCounts(5, 10);
             const data = JSON.parse(AndroidEpc.getData()); // 调用 Android 接口获取数据
             updateTable(data);
         }
@@ -182,28 +173,25 @@
         }
 
         function updateTable(data) {
-            const selectElement = document.querySelector('select');
             // 获取当前选中的<option>元素
-            if (selectElement.selectedIndex == 0) {
-                const dataBody = document.getElementById('recycler-view');
-                dataBody.innerHTML = ''; // 清空表格内容
-                data.forEach(tag => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
+            const dataBody = document.getElementById('recycler-view');
+            dataBody.innerHTML = ''; // 清空表格内容
+            data.forEach(tag => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
                     <td>${tag.epcStr}</td>
                     <td>${tag.tagData}</td>
                     <td>${tag.findCnt}</td>
                     `;
-                    dataBody.appendChild(row);
-                });
+                dataBody.appendChild(row);
+            });
 
-                tagCount = data.length;
-                tagTotalFindCount = 0;
-                data.forEach(tag => {
-                    tagTotalFindCount += tag.findCnt;
-                });
-                updateTagCounts(tagCount, tagTotalFindCount);
-            }
+            tagCount = data.length;
+            tagTotalFindCount = 0;
+            data.forEach(tag => {
+                tagTotalFindCount += tag.findCnt;
+            });
+            updateTagCounts(tagCount, tagTotalFindCount);
         }
 
         function updateStartScanButton() {
