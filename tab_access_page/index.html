@@ -108,7 +108,7 @@
 
         <!-- Inventory Button -->
         <div class="button-container">
-            <button id="btn_access_inventory">开始识别</button>
+            <button id="btn_access_inventory">盘点</button>
         </div>
 
         <!-- Memory Bank -->
@@ -176,15 +176,50 @@
             option.value = i;
             option.text = i;
             wordStartSelect.add(option);
-
         }
+        wordStartSelect.value = 2;
         // 获取word count下拉框元素，循环生成选项并添加到下拉框中
-        var wordStartSelect = document.getElementById('sp_access_word_count');
+        var wordCountSelect = document.getElementById('sp_access_word_count');
         for (var i = 0; i <= 255; i++) {
             var option = document.createElement('option');
             option.value = i;
             option.text = i;
-            wordStartSelect.add(option);
+            wordCountSelect.add(option);
+        }
+        wordCountSelect.value = 1;
+
+        document.getElementById('btn_access_inventory').addEventListener('click', function () {
+            const jsonSpinnerInventoryData = JSON.parse(AndroidEpc.startSpinnerInventory());
+            updateSpinnerInventoryData(jsonSpinnerInventoryData);
+        });
+
+        document.getElementById('btn_access_write').addEventListener('click', function () {
+            const selectElement = document.getElementById('sp_access_epc_list');
+            epcsPosition = selectElement.selectedIndex;
+            wordStartPosition = wordStartSelect.selectedIndex;
+            wordCountPosition = wordCountSelect.selectedIndex;
+            const accessData = document.getElementById('ed_access_data').value;
+            AndroidEpc.htmlAccessInventory(epcsPosition, wordStartPosition, wordCountPosition, accessData);
+        });
+
+        function updateSpinnerInventoryData(epcList) {
+            // 获取 <select> 元素
+            const selectElement = document.getElementById('sp_access_epc_list');
+            selectElement.innerHTML = '';
+            // 遍历数组并创建 <option> 元素
+            epcList.forEach(epc => {
+                const option = document.createElement('option');
+                option.value = epc;
+                option.textContent = epc;
+                selectElement.appendChild(option);
+            });
+        }
+
+        function debugMethod() {
+            const checkboxes = document.querySelectorAll('.checkbox-container input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = !checkbox.checked;
+            });
         }
 
         // Add event listeners for navigation
