@@ -49,57 +49,12 @@
             height: 40px;
             margin: 5px 0;
         }
-
-        /* New styles for the navigation bar */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            background-color: #007bff;
-            padding: 10px;
-            color: #fff;
-            border-top-left-radius: 4px;
-            border-top-right-radius: 4px;
-        }
-
-        .navbar a {
-            color: white;
-            padding: 14px 20px;
-            text-decoration: none;
-            text-align: center;
-        }
-
-        .navbar a:hover {
-            background-color: #0056b3;
-            color: black;
-        }
     </style>
 </head>
 
 <body>
 
-    <!-- Navigation bar -->
-    <div class="navbar">
-        <a href="#" id="tab_inventory_page">标签盘点</a>
-        <a href="#" id="tab_access_page">标签读写</a>
-    </div>
-
-
     <div class="container">
-        <!-- Checkboxes -->
-        <div class="checkbox-container">
-            <input type="checkbox" id="chk_access_ant1" checked>
-            <label for="chk_access_ant1">Ant-1</label>
-
-            <input type="checkbox" id="chk_access_ant2">
-            <label for="chk_access_ant2">Ant-2</label>
-
-            <input type="checkbox" id="chk_access_ant3">
-            <label for="chk_access_ant3">Ant-3</label>
-
-            <input type="checkbox" id="chk_access_ant4">
-            <label for="chk_access_ant4">Ant-4</label>
-        </div>
-
         <!-- Spinner for EPCs -->
         <div class="input-container">
             <label for="sp_access_epc_list">EPCs:</label>
@@ -156,6 +111,8 @@
 
         // initial memory_bank element
         var memoryBankSelect = document.getElementById('sp_access_memory_bank');
+        var wordStartSelect = document.getElementById('sp_access_word_start');
+        var wordCountSelect = document.getElementById('sp_access_word_count');
         var options = [
             { value: '00', text: 'RFU' },
             { value: '01', text: 'EPC' },
@@ -168,9 +125,8 @@
             newOption.text = option.text;
             memoryBankSelect.add(newOption);
         });
-
+        memoryBankSelect.value = '01';
         // 获取word start下拉框元素，循环生成选项并添加到下拉框中
-        var wordStartSelect = document.getElementById('sp_access_word_start');
         for (var i = 0; i <= 255; i++) {
             var option = document.createElement('option');
             option.value = i;
@@ -179,7 +135,6 @@
         }
         wordStartSelect.value = 2;
         // 获取word count下拉框元素，循环生成选项并添加到下拉框中
-        var wordCountSelect = document.getElementById('sp_access_word_count');
         for (var i = 0; i <= 255; i++) {
             var option = document.createElement('option');
             option.value = i;
@@ -196,10 +151,12 @@
         document.getElementById('btn_access_write').addEventListener('click', function () {
             const selectElement = document.getElementById('sp_access_epc_list');
             epcsPosition = selectElement.selectedIndex;
+            memTypePos = memoryBankSelect.selectedIndex;
             wordStartPosition = wordStartSelect.selectedIndex;
-            wordCountPosition = wordCountSelect.selectedIndex;
+            wordCount = wordCountSelect.selectedIndex;
+            const accessPwb = document.getElementById('ed_access_access_pwb').value;
             const accessData = document.getElementById('ed_access_data').value;
-            AndroidEpc.htmlAccessInventory(epcsPosition, wordStartPosition, wordCountPosition, accessData);
+            AndroidEpc.htmlAccessInventory(epcsPosition, memTypePos, wordStartPosition, wordCount, accessPwb, accessData);
         });
 
         function updateSpinnerInventoryData(epcList) {
@@ -221,15 +178,6 @@
                 checkbox.checked = !checkbox.checked;
             });
         }
-
-        // Add event listeners for navigation
-        document.getElementById('tab_inventory_page').addEventListener('click', function () {
-            window.location.href = 'http://192.168.8.100:8082/';
-        });
-
-        document.getElementById('tab_access_page').addEventListener('click', function () {
-            window.location.href = 'http://192.168.8.100:8083/';
-        });
 
     </script>
 </body>
