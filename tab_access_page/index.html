@@ -150,13 +150,13 @@
 
         document.getElementById('btn_access_write').addEventListener('click', function () {
             const selectElement = document.getElementById('sp_access_epc_list');
-            epcsPosition = selectElement.selectedIndex;
+            epcsPos = selectElement.selectedIndex;
             memTypePos = memoryBankSelect.selectedIndex;
-            wordStartPosition = wordStartSelect.selectedIndex;
+            wordStartPos = wordStartSelect.selectedIndex;
             wordCount = wordCountSelect.selectedIndex;
-            const accessPwb = document.getElementById('ed_access_access_pwb').value;
+            const accessPwd = document.getElementById('ed_access_access_pwb').value;
             const accessData = document.getElementById('ed_access_data').value;
-            AndroidEpc.htmlAccessInventory(epcsPosition, memTypePos, wordStartPosition, wordCount, accessPwb, accessData);
+            AndroidEpc.htmlAccessInventory(epcsPos, memTypePos, wordStartPos, wordCount, accessPwd, accessData);
         });
 
         function updateSpinnerInventoryData(epcList) {
