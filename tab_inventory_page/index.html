@@ -62,7 +62,7 @@
             flex-grow: 1;
         }
 
-        .button {
+        .style_button {
             display: block;
             width: calc(100% - 16px);
             margin: 4px auto;
@@ -75,7 +75,7 @@
             cursor: pointer;
         }
 
-        .button:hover {
+        .style_button:hover {
             background-color: #0056b3;
         }
 
@@ -107,16 +107,16 @@
             color: black;
             border-radius: 4px;
         }
+
+        .button-container button {
+            width: 100%;
+            height: 40px;
+            margin: 5px 0;
+        }
     </style>
 </head>
 
 <body>
-
-    <!-- Navigation bar -->
-    <div class="navbar">
-        <a href="#" id="tab_inventory_page">标签盘点</a>
-        <a href="#" id="tab_access_page">标签读写</a>
-    </div>
 
     <div class="card">
         <div class="card-content">
@@ -135,7 +135,12 @@
         </div>
     </div>
 
-    <button class="button" id="start-scan-button" type="button">开始识别</button>
+    <div class="button-container">
+        <button id="scan_button">开始识别</button>
+    </div>
+    <div class="button-container">
+        <button id="tab_access_page">标签访问网页</button>
+    </div>
 
     <div class="card">
         <div class="card-content">
@@ -151,66 +156,82 @@
     </div>
 
     <script>
+
+        document.getElementById('scan_button').addEventListener('click', function () {
+            var button = document.getElementById('scan_button');
+
+            // 检查按钮的当前文字内容
+            if (button.innerHTML === "开始识别") {
+                // 如果是 "开始识别"，则改为 "停止识别"
+                button.innerHTML = "停止识别";
+            } else {
+                // 否则，改回 "开始识别"
+                button.innerHTML = "开始识别";
+            }
+        });
+
         function onKeyDownHandler() {
+            const startScanButton = document.getElementById('scan_button');
             startScanButton.textContent = '停止识别';
         }
 
         function onKeyUpHandler() {
+            const startScanButton = document.getElementById('scan_button');
             startScanButton.textContent = '开始识别';
         }
 
-        function singleTagScanDoneHandler() {
-            // updateTagCounts(5, 10);
-            const data = JSON.parse(AndroidEpc.getData()); // 调用 Android 接口获取数据
-            updateTable(data);
-        }
+        // function singleTagScanDoneHandler() {
+        //     // updateTagCounts(5, 10);
+        //     const data = JSON.parse(AndroidEpc.getData()); // 调用 Android 接口获取数据
+        //     updateTable(data);
+        // }
 
-        function updateTagCounts(labelCount, totalLabelCount) {
-            // 选择并更新标签数量
-            document.getElementById('tag-num').textContent = labelCount;
-            // 选择并更新累计返回标签数量
-            document.getElementById('tag-total-count').textContent = totalLabelCount;
-        }
+        // function updateTagCounts(labelCount, totalLabelCount) {
+        //     // 选择并更新标签数量
+        //     document.getElementById('tag-num').textContent = labelCount;
+        //     // 选择并更新累计返回标签数量
+        //     document.getElementById('tag-total-count').textContent = totalLabelCount;
+        // }
 
-        function updateTable(data) {
-            // 获取当前选中的<option>元素
-            const dataBody = document.getElementById('recycler-view');
-            dataBody.innerHTML = ''; // 清空表格内容
-            data.forEach(tag => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${tag.epcStr}</td>
-                    <td>${tag.tagData}</td>
-                    <td>${tag.findCnt}</td>
-                    `;
-                dataBody.appendChild(row);
-            });
+        // function updateTable(data) {
+        //     // 获取当前选中的<option>元素
+        //     const dataBody = document.getElementById('recycler-view');
+        //     dataBody.innerHTML = ''; // 清空表格内容
+        //     data.forEach(tag => {
+        //         const row = document.createElement('tr');
+        //         row.innerHTML = `
+        //             <td>${tag.epcStr}</td>
+        //             <td>${tag.tagData}</td>
+        //             <td>${tag.findCnt}</td>
+        //             `;
+        //         dataBody.appendChild(row);
+        //     });
 
-            tagCount = data.length;
-            tagTotalFindCount = 0;
-            data.forEach(tag => {
-                tagTotalFindCount += tag.findCnt;
-            });
-            updateTagCounts(tagCount, tagTotalFindCount);
-        }
+        //     tagCount = data.length;
+        //     tagTotalFindCount = 0;
+        //     data.forEach(tag => {
+        //         tagTotalFindCount += tag.findCnt;
+        //     });
+        //     updateTagCounts(tagCount, tagTotalFindCount);
+        // }
 
-        function updateStartScanButton() {
-            const startScanButton = document.getElementById('start-scan-button');
-            if (startScanButton.textContent === '开始识别') {
-                startScanButton.textContent = '停止识别';
-            }
-            else {
-                startScanButton.textContent = '开始识别';
-            }
-        }
+        // function updateStartScanButton() {
+        //     const startScanButton = document.getElementById('scan_button');
+        //     if (startScanButton.textContent === '开始识别') {
+        //         startScanButton.textContent = '停止识别';
+        //     }
+        //     else {
+        //         startScanButton.textContent = '开始识别';
+        //     }
+        // }
 
-        // Add event listeners for navigation
-        document.getElementById('tab_inventory_page').addEventListener('click', function () {
-            window.location.href = 'http://192.168.8.100:8082/';
-        });
+        // // Add event listeners for navigation
+        // document.getElementById('tab_inventory_page').addEventListener('click', function () {
+        //     window.location.href = 'http://192.168.8.100:8082/';
+        // });
 
         document.getElementById('tab_access_page').addEventListener('click', function () {
-            window.location.href = 'http://192.168.8.100:8083/';
+            window.location.href = 'http://192.168.0.100:8083/';
         });
     </script>
 </body>

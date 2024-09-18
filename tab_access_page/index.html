@@ -105,6 +105,9 @@
         <div class="button-container">
             <button id="btn_access_read">读取</button>
         </div>
+        <div class="button-container">
+            <button id="tab_inventory_page">标签盘点网页</button>
+        </div>
     </div>
 
     <script>
@@ -178,6 +181,10 @@
                 checkbox.checked = !checkbox.checked;
             });
         }
+
+        document.getElementById('tab_inventory_page').addEventListener('click', function () {
+            window.location.href = 'http://192.168.0.100:8082/';
+        });
 
     </script>
 </body>
