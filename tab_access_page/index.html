@@ -1,191 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tag Access</title>
+    <title>登录页面</title>
     <style>
-        .container {
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
             display: flex;
-            flex-direction: column;
-            margin: 5px;
-        }
-
-        .horizontal-container {
-            display: flex;
-            flex-direction: row;
-            margin: 5px 0;
-        }
-
-        .checkbox-container,
-        .input-container,
-        .button-container {
-            display: flex;
-            flex-direction: row;
+            justify-content: center;
             align-items: center;
-
+            height: 100vh;
         }
 
-        .checkbox-container input,
-        .input-container input,
-        .input-container select,
-        .button-container button {
-            margin: 0 5px;
+        .login-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
         }
 
-        .input-container label {
-            width: 100px;
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
         }
 
-        .input-container input,
-        .input-container select {
-            flex-grow: 1;
-            height: 35px;
-        }
-
-        .button-container button {
+        .login-container input {
             width: 100%;
-            height: 40px;
-            margin: 5px 0;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .login-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .error {
+            color: red;
+            margin-bottom: 10px;
+            text-align: center;
         }
     </style>
 </head>
 
 <body>
-
-    <div class="container">
-        <!-- Spinner for EPCs -->
-        <div class="input-container">
-            <label for="sp_access_epc_list">EPCs:</label>
-            <select id="sp_access_epc_list"></select>
-        </div>
-
-        <!-- Inventory Button -->
-        <div class="button-container">
-            <button id="btn_access_inventory">盘点</button>
-        </div>
-
-        <!-- Memory Bank -->
-        <div class="input-container">
-            <label for="sp_access_memory_bank">Memory Bank:</label>
-            <select id="sp_access_memory_bank"></select>
-        </div>
-
-        <!-- Word Start -->
-        <div class="input-container">
-            <label for="sp_access_word_start">Word Start:</label>
-            <select id="sp_access_word_start"></select>
-        </div>
-
-        <!-- Word Count -->
-        <div class="input-container">
-            <label for="sp_access_word_count">Word Count:</label>
-            <select id="sp_access_word_count"></select>
-        </div>
-
-        <!-- Access PWB -->
-        <div class="input-container">
-            <label for="ed_access_access_pwb">Access PWB:</label>
-            <input type="text" id="ed_access_access_pwb" value="00000000" pattern="[0-9a-fA-F]*">
-        </div>
-
-        <!-- Data (Hex) -->
-        <div class="input-container">
-            <label for="ed_access_data">Data(Hex):</label>
-            <input type="text" id="ed_access_data" value="0000" pattern="[0-9a-fA-F]*">
-        </div>
-
-        <!-- Write Button -->
-        <div class="button-container">
-            <button id="btn_access_write">写入</button>
-        </div>
-
-        <!-- Read Button -->
-        <div class="button-container">
-            <button id="btn_access_read">读取</button>
-        </div>
-        <div class="button-container">
-            <button id="tab_inventory_page">标签盘点网页</button>
-        </div>
+    <div class="login-container">
+        <h2>用户登录</h2>
+        <div class="error" id="error"></div>
+        <input type="text" id="account" placeholder="用户名">
+        <input type="password" id="password" placeholder="密码">
+        <button onclick="validateLogin()">登录</button>
     </div>
 
     <script>
+        // 模拟的用户名和密码
+        const validUsername = 'admin';
+        const validPassword = '123456';
 
-        // initial memory_bank element
-        var memoryBankSelect = document.getElementById('sp_access_memory_bank');
-        var wordStartSelect = document.getElementById('sp_access_word_start');
-        var wordCountSelect = document.getElementById('sp_access_word_count');
-        var options = [
-            { value: '00', text: 'RFU' },
-            { value: '01', text: 'EPC' },
-            { value: '02', text: 'TID' },
-            { value: '03', text: 'USER' }
-        ];
-        options.forEach(function (option) {
-            var newOption = document.createElement('option');
-            newOption.value = option.value;
-            newOption.text = option.text;
-            memoryBankSelect.add(newOption);
-        });
-        memoryBankSelect.value = '01';
-        // 获取word start下拉框元素，循环生成选项并添加到下拉框中
-        for (var i = 0; i <= 255; i++) {
-            var option = document.createElement('option');
-            option.value = i;
-            option.text = i;
-            wordStartSelect.add(option);
+        function validateLogin() {
+            // 获取输入的用户名和密码
+            const account = document.getElementById('account').value;
+            const password = document.getElementById('password').value;
+            const errorElement = document.getElementById('error');
+
+            // 简单的用户名和密码验证逻辑
+            if (account === validUsername && password === validPassword) {
+                // alert('登录成功！');
+                // errorElement.textContent = '';
+                // 在这里可以跳转到其他页面，比如： window.location.href = 'dashboard.html';
+                window.location.href = 'http://192.168.0.100:8082';
+            } else {
+                errorElement.textContent = '用户名或密码错误！';
+            }
         }
-        wordStartSelect.value = 2;
-        // 获取word count下拉框元素，循环生成选项并添加到下拉框中
-        for (var i = 0; i <= 255; i++) {
-            var option = document.createElement('option');
-            option.value = i;
-            option.text = i;
-            wordCountSelect.add(option);
-        }
-        wordCountSelect.value = 1;
-
-        document.getElementById('btn_access_inventory').addEventListener('click', function () {
-            const jsonSpinnerInventoryData = JSON.parse(AndroidEpc.startSpinnerInventory());
-            updateSpinnerInventoryData(jsonSpinnerInventoryData);
-        });
-
-        document.getElementById('btn_access_write').addEventListener('click', function () {
-            const selectElement = document.getElementById('sp_access_epc_list');
-            epcsPos = selectElement.selectedIndex;
-            memTypePos = memoryBankSelect.selectedIndex;
-            wordStartPos = wordStartSelect.selectedIndex;
-            wordCount = wordCountSelect.selectedIndex;
-            const accessPwd = document.getElementById('ed_access_access_pwb').value;
-            const accessData = document.getElementById('ed_access_data').value;
-            AndroidEpc.htmlAccessInventory(epcsPos, memTypePos, wordStartPos, wordCount, accessPwd, accessData);
-        });
-
-        function updateSpinnerInventoryData(epcList) {
-            // 获取 <select> 元素
-            const selectElement = document.getElementById('sp_access_epc_list');
-            selectElement.innerHTML = '';
-            // 遍历数组并创建 <option> 元素
-            epcList.forEach(epc => {
-                const option = document.createElement('option');
-                option.value = epc;
-                option.textContent = epc;
-                selectElement.appendChild(option);
-            });
-        }
-
-        function debugMethod() {
-            const checkboxes = document.querySelectorAll('.checkbox-container input[type="checkbox"]');
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = !checkbox.checked;
-            });
-        }
-
-        document.getElementById('tab_inventory_page').addEventListener('click', function () {
-            window.location.href = 'http://192.168.0.100:8082/';
-        });
-
     </script>
 </body>
 
