@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- <pre id="debug_area">数据加载中...</pre> -->
-<!-- this is for DT50 -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -59,17 +58,12 @@
         <!-- Spinner for EPCs -->
         <div class="input-container">
             <label for="sp_access_epc_list">EPCs:</label>
-            <input type="text" id="sp_access_epc_list"></select>
-        </div>
-
-        <div class="input-container">
-            <label for="sp_access_epc_box">EPCs:</label>
-            <input type="textbox" id="sp_access_epc_box"></select>
+            <select id="sp_access_epc_list"></select>
         </div>
 
         <!-- Inventory Button -->
         <div class="button-container">
-            <button id="btn_access_inventory">开始盘点</button>
+            <button id="btn_access_inventory">盘点</button>
         </div>
 
         <!-- Memory Bank -->
@@ -157,31 +151,10 @@
         }
         wordCountSelect.value = 1;
 
-        function onKeyDownHandler() {
-            const accessButton = document.getElementById('btn_access_inventory');
-            accessButton.textContent = '停止盘点';
-        }
-
-        function onKeyUpHandler() {
-            const accessButton = document.getElementById('btn_access_inventory');
-            accessButton.textContent = '开始盘点';
-        }
-
         document.getElementById('btn_access_inventory').addEventListener('click', function () {
             const jsonSpinnerInventoryData = JSON.parse(AndroidEpc.startSpinnerInventory());
-
-            const debugElement = document.getElementById('debug_area'); // 页面中的调试区域
-
-            if (debugElement) {
-                debugElement.textContent = JSON.stringify(jsonSpinnerInventoryData, null, 2); // 格式化输出
-            }
-
-            // 获取文本框元素
-            var textbox = document.getElementById("sp_access_epc_box");
-
-            // 更改文本框的值
-            textbox.value = jsonSpinnerInventoryData;
-
+            updateSpinnerInventoryData(jsonSpinnerInventoryData);
+            AndroidEpc.clearFocus();
         });
 
         document.getElementById('btn_access_write').addEventListener('click', function () {
@@ -195,6 +168,18 @@
             AndroidEpc.htmlAccessInventory(epcsPos, memTypePos, wordStartPos, wordCount, accessPwd, accessData);
         });
 
+        function updateSpinnerInventoryData(epcList) {
+            // 获取 <select> 元素
+            const selectElement = document.getElementById('sp_access_epc_list');
+            selectElement.innerHTML = '';
+            // 遍历数组并创建 <option> 元素
+            epcList.forEach(epc => {
+                const option = document.createElement('option');
+                option.value = epc;
+                option.textContent = epc;
+                selectElement.appendChild(option);
+            });
+        }
 
         function debugMethod() {
             const checkboxes = document.querySelectorAll('.checkbox-container input[type="checkbox"]');
@@ -204,7 +189,7 @@
         }
 
         document.getElementById('tab_inventory_page').addEventListener('click', function () {
-            window.location.href = 'http://192.168.0.100:8083/';
+            window.location.href = 'http://192.168.0.100:8082/';
         });
 
         document.cookie.split(";").forEach(function (c) {

@@ -62,14 +62,14 @@
     <div class="login-container">
         <h2>用户登录</h2>
         <div class="error" id="error"></div>
-        <input type="text" id="account" placeholder="用户名">
-        <input type="password" id="password" placeholder="密码">
-        <button onclick="validateLogin()">登录</button>
+        <input type="text" id="account" placeholder="账号" class="ant-input ant-input-lg">
+        <input type="password" id="password" placeholder="密码" class="ant-input ant-input-lg">
+        <button onclick="validateLogin()">登录登录</button>
     </div>
 
     <script>
         // 模拟的用户名和密码
-        const validUsername = 'admin';
+        const validUsername = 'superAdmin';
         const validPassword = '123456';
 
         function validateLogin() {
@@ -83,11 +83,12 @@
                 // alert('登录成功！');
                 // errorElement.textContent = '';
                 // 在这里可以跳转到其他页面，比如： window.location.href = 'dashboard.html';
-                window.location.href = 'http://192.168.0.100:8082';
+                window.location.href = 'http://192.168.0.101:8082';
             } else {
                 errorElement.textContent = '用户名或密码错误！';
             }
         }
+
     </script>
 </body>
 
