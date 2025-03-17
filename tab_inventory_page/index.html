@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- <pre id="debug_area">数据加载中...</pre> -->
+
 <!-- this is for DT50 -->
 
 <head>
@@ -275,21 +275,6 @@
                 accessButton.textContent = '停止盘点';
             }
         }
-
-        function debugMethod() {
-            const checkboxes = document.querySelectorAll('.checkbox-container input[type="checkbox"]');
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = !checkbox.checked;
-            });
-        }
-
-        document.getElementById('tab_inventory_page').addEventListener('click', function () {
-            window.location.href = 'http://192.168.0.100:8083/';
-        });
-
-        document.cookie.split(";").forEach(function (c) {
-            document.cookie = c.trim().split("=")[0] + "=;expires=" + new Date(0).toUTCString() + ";path=/";
-        });
 
     </script>
 </body>
