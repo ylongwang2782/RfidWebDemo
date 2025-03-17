@@ -2,6 +2,7 @@
 <html lang="en">
 <!-- <pre id="debug_area">数据加载中...</pre> -->
 <!-- this is for DT50 -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -112,9 +113,9 @@
             <button id="btn_access_read">读取</button>
         </div>
 
-        <div class="button-container">
+        <!-- <div class="button-container">
             <button id="tab_inventory_page">标签盘点网页</button>
-        </div>
+        </div> -->
 
         <div class="button-container">
             <button id="btn_clear_focus">清除焦点</button>
@@ -189,9 +190,12 @@
             epcsPos = selectElement.selectedIndex;
             memTypePos = memoryBankSelect.selectedIndex;
             wordStartPos = wordStartSelect.selectedIndex;
-            wordCount = wordCountSelect.selectedIndex;
+            // wordCount = wordCountSelect.selectedIndex;
             const accessPwd = document.getElementById('ed_access_access_pwb').value;
+            AndroidEpc.startSpinnerInventory()
             const accessData = document.getElementById('ed_access_data').value;
+            wordCount = Math.ceil(accessData.length / 4)
+
             AndroidEpc.htmlAccessInventory(epcsPos, memTypePos, wordStartPos, wordCount, accessPwd, accessData);
         });
 
