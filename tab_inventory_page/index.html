@@ -64,8 +64,8 @@
         </div>
 
         <div class="input-container">
-            <label for="sp_access_epc_box">EPCs:</label>
-            <input type="textbox" id="sp_access_epc_box"></select>
+            <label for="sp_access_epc_ascii_list">EPCs(ASCII):</label>
+            <input type="text" id="sp_access_epc_ascii_list"></select>
         </div>
 
         <!-- Inventory Button -->
@@ -105,8 +105,20 @@
 
         <!-- Write Button -->
         <div class="button-container">
-            <button id="btn_access_write">写入</button>
+            <button id="btn_access_hex_write">写入</button>
         </div>
+
+        <!-- Data (ASCII) -->
+        <div class="input-container">
+            <label for="ed_access_ascii">Data(ASCII):</label>
+            <input type="text" id="ed_access_ascii">
+        </div>
+
+        <!-- Write Button -->
+        <div class="button-container">
+            <button id="btn_access_ascii_write">写入</button>
+        </div>
+
 
         <!-- Read Button -->
         <div class="button-container">
@@ -177,26 +189,68 @@
                 debugElement.textContent = JSON.stringify(jsonSpinnerInventoryData, null, 2); // 格式化输出
             }
 
-            // 获取文本框元素
-            var textbox = document.getElementById("sp_access_epc_box");
+            // 更新epc hex
+            const epcHexElement = document.getElementById('sp_access_epc_list');
+            if (epcHexElement) {
+                epcHexElement.value = jsonSpinnerInventoryData;
+            }
 
-            // 更改文本框的值
-            textbox.value = jsonSpinnerInventoryData;
+            // 更新epc ASCII
+            const epcAsciiElement = document.getElementById('sp_access_epc_ascii_list');
+            if (epcAsciiElement) {
+                const hexString = jsonSpinnerInventoryData.replace(/\s/g, '');
+                let asciiString = '';
+                for (let i = 0; i < hexString.length; i += 2) {
+                    const hexChar = hexString.substr(i, 2);
+                    if (hexChar.match(/[0-9a-fA-F]{2}/)) {
+                        asciiString += String.fromCharCode(parseInt(hexChar, 16));
+                    }
+                }
+                epcAsciiElement.value = asciiString;
+            }
 
         });
 
-        document.getElementById('btn_access_write').addEventListener('click', function () {
+        document.getElementById('btn_access_hex_write').addEventListener('click', function () {
             const selectElement = document.getElementById('sp_access_epc_list');
-            epcsPos = selectElement.selectedIndex;
-            memTypePos = memoryBankSelect.selectedIndex;
-            wordStartPos = wordStartSelect.selectedIndex;
+            // epcPos固定为0
+            epcsPos = 0;
+            // memTypePos固定为2
+            memTypePos =2;
+            // 起始字节位置固定为2
+            wordStartPos = 2;
             // wordCount = wordCountSelect.selectedIndex;
             const accessPwd = document.getElementById('ed_access_access_pwb').value;
+            
             AndroidEpc.startSpinnerInventory()
             const accessData = document.getElementById('ed_access_data').value;
             wordCount = Math.ceil(accessData.length / 4)
 
             AndroidEpc.htmlAccessInventory(epcsPos, memTypePos, wordStartPos, wordCount, accessPwd, accessData);
+        });
+
+        document.getElementById('btn_access_ascii_write').addEventListener('click', function () {
+            const selectElement = document.getElementById('sp_access_epc_list');
+            // epcPos固定为0
+            epcsPos = 0;
+            // memTypePos固定为2
+            memTypePos =2;
+            // 起始字节位置固定为2
+            wordStartPos = 2;
+            const accessPwd = document.getElementById('ed_access_access_pwb').value;
+            AndroidEpc.startSpinnerInventory()
+
+            // 获取ASCII数据并转换为HEX
+            const asciiData = document.getElementById('ed_access_ascii').value;
+            let hexData = '';
+            for (let i = 0; i < asciiData.length; i++) {
+                const hexChar = asciiData.charCodeAt(i).toString(16).padStart(2, '0');
+                hexData += hexChar;
+            }
+            wordCount = Math.ceil(hexData.length / 4);
+
+            // 使用转换后的HEX数据进行写入
+            AndroidEpc.htmlAccessInventory(epcsPos, memTypePos, wordStartPos, wordCount, accessPwd, hexData);
         });
 
 
