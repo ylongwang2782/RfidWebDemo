@@ -119,6 +119,12 @@
             <button id="btn_access_ascii_write">ASCII写入</button>
         </div>
 
+        <!-- 写入调用结果 -->
+        <div class="input-container">
+            <label for="display_result">写入调用结果:</label>
+            <textarea id="display_result" readonly></textarea>
+        </div>
+
         <div class="button-container">
             <button id="btn_clear_focus">清除焦点</button>
         </div>
@@ -249,7 +255,13 @@
                     wordCount = Math.ceil(hexData.length / 4);
 
                     // 使用转换后的HEX数据进行写入
-                    AndroidEpc.htmlAccessInventory(epcsPos, memTypePos, wordStartPos, wordCount, accessPwd, hexData);
+                    const writeTagStatus = AndroidEpc.htmlAccessInventory(epcsPos, memTypePos, wordStartPos, wordCount, accessPwd, hexData);
+
+                    // 将写入返回值显示到文本框中
+                    const displayResult = document.getElementById('display_result');
+                    if (displayResult) {
+                        displayResult.value = writeTagStatus.toString();
+                    }
 
                     // 写完后立即进行读取，进行数据校验
                     document.getElementById('btn_access_inventory').click();
