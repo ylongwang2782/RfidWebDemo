@@ -129,6 +129,34 @@
             <button id="btn_clear_focus">清除焦点</button>
         </div>
 
+        <!-- 功率查询结果 -->
+        <div class="input-container">
+            <label for="power_query_result">功率查询结果:</label>
+            <textarea id="power_query_result" readonly></textarea>
+        </div>
+
+        <!-- 功率查询 -->
+        <div class="button-container">
+            <button id="btn_power_query">功率查询</button>
+        </div>
+
+        <!-- 功率设置 -->
+        <div class="input-container">
+            <label for="power_set">功率设置:</label>
+            <input type="text" id="power_set" value="00">
+        </div>
+
+        <!-- 功率设置结果 -->
+        <div class="input-container">
+            <label for="power_set_result">功率设置结果:</label>
+            <textarea id="power_set_result" readonly></textarea>
+        </div>
+
+        <!-- 功率设置按钮 -->
+        <div class="button-container">
+            <button id="btn_power_set">功率设置</button>
+        </div>
+
     </div>
 
     <script>
@@ -287,6 +315,23 @@
                 accessButton.textContent = '停止盘点';
             }
         }
+
+        //  通过AndroidEpc.getPower()获得功率
+        document.getElementById('btn_power_query').addEventListener('click', function () {
+            const powerQueryResult = document.getElementById('power_query_result');
+            if (powerQueryResult) {
+                powerQueryResult.value = AndroidEpc.getPower();
+            }
+        })
+
+        // 通过AndroidEpc.setPower()设置功率
+        document.getElementById('btn_power_set').addEventListener('click', function () {
+            const powerSet = parseInt(document.getElementById('power_set').value, 10); // 转换为 int 类型
+            const powerSetResult = document.getElementById('power_set_result');
+            if (powerSetResult) {
+                powerSetResult.value = AndroidEpc.setPower(powerSet);
+            }
+        })
 
     </script>
 </body>
