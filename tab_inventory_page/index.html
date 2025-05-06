@@ -157,6 +157,28 @@
             <button id="btn_power_set">功率设置</button>
         </div>
 
+        <!-- 新增：标签数据表格 -->
+        <div class="input-container">
+            <table id="tagTable" border="1" style="width: 100%; margin-top: 10px;">
+                <thead>
+                    <tr>
+                        <th>RSSI</th>
+                        <th>EPC</th>
+                        <th>TID</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody id="tagTableBody">
+                    <!-- 表格内容将通过JavaScript动态填充 -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 新增：显示标签数据按钮 -->
+        <div class="button-container">
+            <button id="btn_show_tags">显示标签数据</button>
+        </div>
+
     </div>
 
     <script>
@@ -332,6 +354,45 @@
                 powerSetResult.value = AndroidEpc.setPower(powerSet);
             }
         })
+
+        // 新增函数：显示标签数据表格
+        function displayTagData(jsonData) {
+            const tableBody = document.getElementById('tagTableBody');
+            tableBody.innerHTML = ''; // 清空现有内容
+
+            try {
+                const tags = JSON.parse(jsonData);
+                tags.forEach(tag => {
+                    const row = document.createElement('tr');
+
+                    const rssiCell = document.createElement('td');
+                    rssiCell.textContent = tag.rssi;
+                    row.appendChild(rssiCell);
+
+                    const epcCell = document.createElement('td');
+                    epcCell.textContent = tag.epc;
+                    row.appendChild(epcCell);
+
+                    const tidCell = document.createElement('td');
+                    tidCell.textContent = tag.tid;
+                    row.appendChild(tidCell);
+
+                    const countCell = document.createElement('td');
+                    countCell.textContent = tag.count;
+                    row.appendChild(countCell);
+
+                    tableBody.appendChild(row);
+                });
+            } catch (e) {
+                console.error('解析标签数据失败:', e);
+            }
+        }
+
+        // 新增：显示标签数据按钮点击事件
+        document.getElementById('btn_show_tags').addEventListener('click', function () {
+            const inventoryData = AndroidEpc.getInventory();
+            displayTagData(inventoryData);
+        });
 
     </script>
 </body>
