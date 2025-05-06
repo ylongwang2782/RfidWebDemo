@@ -70,7 +70,7 @@
 
         <!-- Inventory Button -->
         <div class="button-container">
-            <button id="btn_access_inventory">开始盘点</button>
+            <button id="btn_single_inventory">单次盘点</button>
         </div>
 
         <!-- Memory Bank -->
@@ -179,6 +179,11 @@
             <button id="btn_show_tags">显示标签数据</button>
         </div>
 
+        <!-- Inventory Button -->
+        <div class="button-container">
+            <button id="btn_access_inventory">开始盘点</button>
+        </div>
+
     </div>
 
     <script>
@@ -218,17 +223,16 @@
         wordCountSelect.value = 1;
 
         function onKeyDownHandler() {
-            const accessButton = document.getElementById('btn_access_inventory');
+            // const accessButton = document.getElementById('btn_access_inventory');
             accessButton.textContent = '停止盘点';
         }
 
         function onKeyUpHandler() {
-            const accessButton = document.getElementById('btn_access_inventory');
+            // const accessButton = document.getElementById('btn_access_inventory');
             accessButton.textContent = '开始盘点';
         }
 
-        document.getElementById('btn_access_inventory').addEventListener('click', function () {
-            toggle_btn_access_inventory();
+        document.getElementById('btn_single_inventory').addEventListener('click', function () {
 
             const jsonSpinnerInventoryData = JSON.parse(AndroidEpc.startSpinnerInventory());
 
@@ -314,7 +318,7 @@
                     }
 
                     // 写完后立即进行读取，进行数据校验
-                    document.getElementById('btn_access_inventory').click();
+                    document.getElementById('btn_single_inventory').click();
                 } catch (error) {
                     console.error('执行失败，重试中...', error);
                     if (retryCount > 0) {
@@ -387,6 +391,24 @@
                 console.error('解析标签数据失败:', e);
             }
         }
+
+        document.getElementById('btn_access_inventory').addEventListener('click', function () {
+            const accessButton = document.getElementById('btn_access_inventory');
+
+            if (accessButton.textContent === '开始盘点') {
+                // 开始盘点
+                AndroidEpc.startContinuousInventory();
+                accessButton.textContent = '停止盘点';
+
+                // 可以在这里添加自动刷新表格数据的逻辑
+                const inventoryData = AndroidEpc.getInventory();
+                displayTagData(inventoryData);
+            } else {
+                // 停止盘点
+                AndroidEpc.stopContinuousInventory();
+                accessButton.textContent = '开始盘点';
+            }
+        });
 
         // 新增：显示标签数据按钮点击事件
         document.getElementById('btn_show_tags').addEventListener('click', function () {
