@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>localStorage 示例</title>
+</head>
+<body>
+    <h1>localStorage 示例</h1>
+    <button onclick="saveData()">保存数据</button>
+    <button onclick="readData()">读取数据</button>
+    <button onclick="clearData()">清除数据</button>
+    <p id="output"></p>
+
+    <script>
+        // 检查浏览器是否支持 localStorage
+        function isLocalStorageSupported() {
+            try {
+                const testKey = '__test__';
+                localStorage.setItem(testKey, testKey);
+                localStorage.removeItem(testKey);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // 保存数据到 localStorage
+        function saveData() {
+            if (!isLocalStorageSupported()) {
+                document.getElementById('output').textContent = '您的浏览器不支持 localStorage！';
+                return;
+            }
+            localStorage.setItem('username', 'JohnDoe');
+            document.getElementById('output').textContent = '数据已保存：username = JohnDoe';
+        }
+
+        // 从 localStorage 读取数据
+        function readData() {
+            if (!isLocalStorageSupported()) {
+                document.getElementById('output').textContent = '您的浏览器不支持 localStorage！';
+                return;
+            }
+            const username = localStorage.getItem('username');
+            if (username) {
+                document.getElementById('output').textContent = '读取的数据：username = ' + username;
+            } else {
+                document.getElementById('output').textContent = '未找到数据！';
+            }
+        }
+
+        // 清除 localStorage 中的数据
+        function clearData() {
+            if (!isLocalStorageSupported()) {
+                document.getElementById('output').textContent = '您的浏览器不支持 localStorage！';
+                return;
+            }
+            localStorage.removeItem('username');
+            document.getElementById('output').textContent = '数据已清除！';
+        }
+
+        // 页面加载时检查 localStorage 是否可用
+        window.onload = function () {
+            if (isLocalStorageSupported()) {
+                console.log('localStorage 可用！');
+            } else {
+                console.log('localStorage 不可用！');
+            }
+        };
+    </script>
+</body>
+</html>
